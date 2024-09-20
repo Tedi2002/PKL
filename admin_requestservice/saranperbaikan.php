@@ -143,11 +143,11 @@ else
               </a>
               <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
               <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=3") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
+                $dibatalkan  = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=6") or die (mysqli_error($koneksi));
+                $jmldibatalkan = mysqli_num_rows($dibatalkan);
                
                 ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
+              <span class="badge badge-secondary right"><?=$jmldibatalkan;?></span>
               </a>
               <a href="sedangproses.php" class="btn btn-sm btn-info"> Sedang Diproses
               <?php

@@ -214,11 +214,7 @@ else
                       $idteknisi = $dt_request['id_teknisi'];
                       $pglteknisi = mysqli_query($koneksi,"SELECT nama FROM tbl_teknisi WHERE id_teknisi = '$idteknisi'")or die (mysqli_error($koneksi));
                       $arrteknisi = mysqli_fetch_assoc($pglteknisi);
-                      if($dt_request['status'] == '0'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-danger"> Dibatalkan</button>
-                        <?php
-                      }
+                      
                       if($dt_request['status'] == '1'){
                         ?>
                         <button type="button" class="btn btn-sm btn-danger"> Belum delegasi</button>
@@ -262,7 +258,18 @@ else
 
                         <?php
                         
+                      }if($dt_request['status'] == '6'){
+                        ?>
+                        <button type="button" class="btn btn-sm btn-primary"> Dibatalkan</button><br>
+                        <?php $namateknisi = $arrteknisi['nama']; ?>
+                        <?=$namateknisi;?>
+                        
+
+                        <?php
+                        
                       }
+
+
 
                       ?>
                       </center>

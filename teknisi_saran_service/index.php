@@ -117,6 +117,7 @@ else
                     <th>keluhan</th>
                     <th>keterangan</th>
                     <th>Saran Teknisi</th>
+                    <th>Jenis Service</th>
                     <th>aksi</th>
                   </tr>
                   </thead>
@@ -144,6 +145,34 @@ else
                           </button>
                         </td>
                         <td><?= $dt_saran['saran_teknisi']; ?></td>
+                        <td>
+                          <?php 
+                          if($dt_saran['jenis_service'] == '1'){
+                            ?>
+                            <button type="button" class="btn btn-sm btn-danger"> Belum delegasi</button>
+                            <?php
+                          }
+                          if($dt_request['status'] == '2'){
+                            
+                            ?>
+                            <button type="button" class="btn btn-sm btn-info"> Sudah delegasi</button>
+                            <br> 
+                            <?php $namateknisi = $arrteknisi['nama']; ?>
+                            <?=$namateknisi;?>
+                            <?php
+                          }
+                          if($dt_request['status'] == '3'){
+                            ?>
+                            <button type="button" class="btn btn-sm btn-success"> Sudah Dikasih Saran</button><br>
+                            <?php $namateknisi = $arrteknisi['nama']; ?>
+                            <?=$namateknisi;?>
+                            
+    
+                            <?php
+                            
+                          }
+                          ?>
+                        </td>                    
                         <td>
                         <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-kirimsaran" data-id_request="<?= $dt_saran['id_request']; ?>"   data-tanggal_masuk="<?= $dt_saran['tanggal_request']; ?>" data-keluhan="<?= $dt_saran['keluhan']; ?>" data-keterangan="<?= $dt_saran['keterangan']; ?>"  data-saran_teknisi="<?= $dt_saran['saran_teknisi']; ?>"  ><i class="nav-icon fas fa-edit"></i> Isi Saran</button>
                         <!-- <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-delegasi" data-id_request="<?= $dt_saran['id_request']; ?>"><i class="nav-icon fas fa-eye">Delegasi</i> -->
@@ -240,6 +269,12 @@ else
                         <td><input type="text" name="ed_saran" class="form-control" >
                       </td>
                       </tr>
+                      <tr>
+                        <td width="30%">Jenis Service</td>
+                        <td width="5%">:</td>
+                        <td><input type="text" name="ed_jenis" class="form-control" >
+                      </td>
+                      </tr>
                     </tbody>
                   </thead>
                 </table>
@@ -280,16 +315,14 @@ $(e.currentTarget).find('input[name="keterangan"]').val(keterangan);
 $('#modal-kirimsaran').on ('show.bs.modal', function(e){
 
   var ed_idrq = $(e.relatedTarget).data('id_request');
-  // var ed_tgl = $(e.relatedTarget).data('tanggal_request');
   var ed_keluhan = $(e.relatedTarget).data('keluhan');
-  // var ed_ket =$(e.relatedTarget).data('keterangan');
   var ed_saran =$(e.relatedTarget).data('saran_teknisi');
+  var ed_jenis =$(e.relatedTarget).data('jenis_service');
 
-  $(e.currentTarget).find('input[name="ed_idrq"]').val(ed_idrq);
-  // $(e.currentTarget).find('input[name="ed_tgl"]').val(ed_tgl);
+  $(e.currentTarget).find('input[name="ed_idrq"]').val(ed_idrq); 
   $(e.currentTarget).find('input[name="ed_keluhan"]').val(ed_keluhan);
-  // $(e.currentTarget).find('input[name="ed_ket"]').val(ed_ket);
   $(e.currentTarget).find('input[name="ed_saran"]').val(ed_saran);
+  $(e.currentTarget).find('input[name="ed_jenis"]').val(ed_jenis);
 });
 </script>
 </body>
