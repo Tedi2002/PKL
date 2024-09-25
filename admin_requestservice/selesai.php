@@ -141,14 +141,6 @@ else
                 ?>
               <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
               </a>
-              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=3") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
               <a href="sedangproses.php" class="btn btn-sm btn-info"> Sedang Diproses
               <?php
                 $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=4") or die (mysqli_error($koneksi));
@@ -163,7 +155,13 @@ else
                 $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
                
                 ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
+              </a>
+              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
+              <?php
+                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=0") or die (mysqli_error($koneksi));
+                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
+               
+                ?>
               </a>
                       
               
@@ -178,7 +176,6 @@ else
                     <th>keluhan</th>
                     <th>keterangan</th>
                     <th>saran</th>
-                    <th>Status</th>
                     <th>aksi</th>
                   </tr>
                   </thead>
@@ -201,7 +198,14 @@ else
                         </td>
                         <td><?= $dt_request['nama_cust']; ?></td>
                         <td><?= $dt_request['alamat']; ?></td>
-                        <td><?= $dt_request['kontak']; ?></td>
+                        <td><center>
+                        <a href="https://api.whatsapp.com/send?phone=<?=$dt_request['kontak'];?>&text=
+                        Hallo, dengan Sdr/i <?=$dt_request['nama_cust'];?>, saya <?=$_SESSION['nama'];?> CS Pangeran Komputer, berkenan
+                        hendak menginformasikan bahwa sesuai saran teknisi kami terhadap request service anda yakni <?=$dt_request['saran_teknisi']?> 
+                        telah selesai dikerjakan, Terimakasih atas kepercayaan anda, berikut rincian biaya yang perlu anda siapkan" 
+                        class="btn btn-sm btn-success" target="_blank">
+                        <img src="../img/wa.png" height="18px" weight="18px"><?=$dt_request['kontak'];?></a>
+                        </center></td>
                         <td><?= $dt_request['keluhan']; ?></td>
                         <td>
                           <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-ket" data-keterangan="<?= $dt_request['keterangan']; ?>"><i class="nav-icon fas fa-eye"></i>
@@ -209,93 +213,15 @@ else
                         </td>
                         <td><?= $dt_request['saran_teknisi']; ?></td>
                         <td>
-                          <center>
-                      <?php
-                      $idteknisi = $dt_request['id_teknisi'];
-                      $pglteknisi = mysqli_query($koneksi,"SELECT nama FROM tbl_teknisi WHERE id_teknisi = '$idteknisi'")or die (mysqli_error($koneksi));
-                      $arrteknisi = mysqli_fetch_assoc($pglteknisi);
-                      
-                      if($dt_request['status'] == '0'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-danger"> Dibatalkan</button>
-                        <?php
-                      }
-                      if($dt_request['status'] == '1'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-danger"> Belum delegasi</button>
-                        <?php
-                      }
-                      if($dt_request['status'] == '2'){
-                        
-                        ?>
-                        <button type="button" class="btn btn-sm btn-info"> Sudah delegasi</button>
-                        <br> 
-                        <?php $namateknisi = $arrteknisi['nama']; ?>
-                        <?=$namateknisi;?>
-                        <?php
-                      }
-                      if($dt_request['status'] == '3'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-success"> Sudah Dikasih Saran</button><br>
-                        <?php $namateknisi = $arrteknisi['nama']; ?>
-                        <?=$namateknisi;?>
-                        
-
-                        <?php
-                        
-                      }
-                      if($dt_request['status'] == '4'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-primary"> Sedang Diproses</button><br>
-                        <?php $namateknisi = $arrteknisi['nama']; ?>
-                        <?=$namateknisi;?>
-                        
-
-                        <?php
-                        
-                      }
-                      if($dt_request['status'] == '5'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-primary"> Selesai</button><br>
-                        <?php $namateknisi = $arrteknisi['nama']; ?>
-                        <?=$namateknisi;?>
-                        
-
-                        <?php
-                        
-                      }
-
-                      ?>
-                      </center>
-                      
-                      
-                      </td>
-                        <td>
-                        <button type="button" class="btn  btn-sm btn-info btn-edit" data-toggle="modal" data-target="#modal-edit" data-id_request="<?= $dt_request['id_request']; ?>" data-nama_cust="<?= $dt_request['nama_cust']; ?>" data-kontak="<?= $dt_request['kontak']; ?>" data-alamat="<?= $dt_request['alamat']; ?>" data-tanggal_request="<?= $dt_request['tanggal_request']; ?>" data-keluhan="<?= $dt_request['keluhan']; ?>" data-keterangan="<?= $dt_request['keterangan']; ?>" data-id_teknisi="<?= $dt_request['id_teknisi']; ?>" data-saran_teknisi="<?= $dt_request['saran_teknisi']; ?>" data-status="<?= $dt_request['status']; ?>" ><i class="nav-icon fas fa-edit"></i></button>
-                        <a href="proses.php?hps_request=<?= encriptData($dt_request['id_request']); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Anda akan menghapus request dengan id [<?= encriptData($dt_request['id_request']);?>]')"><i class="fas fa-trash"></i></a>
-                        
-                     
-                        <?php 
-                        if ($dt_request['status'] != '3') { ?>
-                        <button type="button" name="delegasi" class="btn btn-sm btn-info btn-edit" data-toggle="modal" data-target="#modal-delegasi" data-id_request="<?= $dt_request['id_request']; ?>">
-                          <i class="nav-icon fas fa-eye"></i> Delegasi
-                        </button>
-                        <?php }
-                        else { ?>
-                        <a href="proses_service.php?service=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-primary" onclick="return confirm('Proses Service Ini?')"><i class="fas fa-spinner"></i>Proses</a>
-                        <a href="proses_batal.php?service=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bataklkan Proses Service Ini?')"><i class="fas fa-"></i>Batal</a>
-                        <?php } ?>
-
+                        <a href="../admin_penjualan" class="btn btn-sm btn-danger"><i class="fas fa-file"></i> Nota</a>
+                        <!-- <a href="notaservice.php=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-danger"><i class="fas fa-file"></i> Nota</a> -->
 
                       </td>
-          
-                      </tr>
-                      <?php }
-                    }
-                    ?>
-                  
-                  
+                      </tr>        
                   </tbody>
+                  <?php
+                      }
+                  ?>
                   <tfoot>
                   
                   </tfoot>
@@ -556,6 +482,7 @@ $('#modal-delegasi').on ('show.bs.modal', function(e){
   
 });
 <?php
+}
 }
 ?>
 </script>

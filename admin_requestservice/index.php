@@ -20,7 +20,7 @@ if ($_SESSION['hak_akses']!=1){
   }
   $ket = "Pengguna dengan username ".$usr." , nama : ".$nama." melakukan cross authority dengan akses  sebagai ".$tersangka;
   $querycrossauth = mysqli_query($koneksi, "INSERT INTO tbl_cross_auth VALUES (NULL,'$usr','$waktu', '$ket')") or die (mysqli_error($koneksi));
-  // echo '<script>window.location="../login/logout.php"</script>';
+  echo '<script>window.location="../login/logout.php"</script>';
 
   
 }
@@ -50,8 +50,14 @@ else
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+
+<!-- Preloader -->
+<div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="../img/logoservice.png" alt="Monev Skripsi" height="150px" width="150px">
+  </div>
+
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-light navbar-dark">
     <?php 
     include '../navbar.php';
     ?>
@@ -59,11 +65,11 @@ else
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-warning elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Service Komputer</span>
+      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle " style="opacity: .8">
+      <span class="brand-text font-weight-light"><b><h5>Pangeran Komputer</h5></b></span>
     </a>
 
     <!-- Sidebar -->
@@ -93,7 +99,17 @@ else
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard Admin Data Request</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard Admin Data Request</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -141,14 +157,6 @@ else
                 ?>
               <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
               </a>
-              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=3") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
               <a href="sedangproses.php" class="btn btn-sm btn-info"> Sedang Diproses
               <?php
                 $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=4") or die (mysqli_error($koneksi));
@@ -163,7 +171,13 @@ else
                 $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
                
                 ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
+              </a>
+              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
+              <?php
+                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=0") or die (mysqli_error($koneksi));
+                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
+               
+                ?>
               </a>
                       
               
@@ -201,7 +215,10 @@ else
                         </td>
                         <td><?= $dt_request['nama_cust']; ?></td>
                         <td><?= $dt_request['alamat']; ?></td>
-                        <td><?= $dt_request['kontak']; ?></td>
+                        <td><center>
+                        <a href="https://api.whatsapp.com/send?phone=<?=$dt_request['kontak'];?>&text=Hallo, <?=$dt_request['nama_cust'];?>" class="btn btn-sm btn-success" target="_blank">
+                        <img src="../img/wa.png" height="18px" weight="18px"><?=$dt_request['kontak'];?></a>
+                        </center></td>
                         <td><?= $dt_request['keluhan']; ?></td>
                         <td>
                           <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-ket" data-keterangan="<?= $dt_request['keterangan']; ?>"><i class="nav-icon fas fa-eye"></i>
@@ -214,7 +231,11 @@ else
                       $idteknisi = $dt_request['id_teknisi'];
                       $pglteknisi = mysqli_query($koneksi,"SELECT nama FROM tbl_teknisi WHERE id_teknisi = '$idteknisi'")or die (mysqli_error($koneksi));
                       $arrteknisi = mysqli_fetch_assoc($pglteknisi);
-                      
+                      if($dt_request['status'] == '0'){
+                        ?>
+                        <button type="button" class="btn btn-sm btn-danger"> Dibatalkan</button>
+                        <?php
+                      }
                       if($dt_request['status'] == '1'){
                         ?>
                         <button type="button" class="btn btn-sm btn-danger"> Belum delegasi</button>
@@ -258,18 +279,7 @@ else
 
                         <?php
                         
-                      }if($dt_request['status'] == '6'){
-                        ?>
-                        <button type="button" class="btn btn-sm btn-primary"> Dibatalkan</button><br>
-                        <?php $namateknisi = $arrteknisi['nama']; ?>
-                        <?=$namateknisi;?>
-                        
-
-                        <?php
-                        
                       }
-
-
 
                       ?>
                       </center>

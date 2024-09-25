@@ -95,14 +95,8 @@ require_once '../database/config.php'
                     $datauser = mysqli_fetch_assoc($cekdatabase);
                     $stt= $datauser['hak_akses'];
                     session_start();
-                    if ($stt == 0){
-                      
-                      $_SESSION['user'] = $datauser['username'];
-                      $_SESSION['nama'] = $datauser['nama'];
-                      $_SESSION['hak_akses'] = $datauser['hak_akses'];
-                      echo '<script>window.location = "../superadmin_dashboard" </script>';
-                    }
-                    elseif ($stt==1){
+                    
+                    if ($stt==1){
                       $_SESSION['user'] = $datauser['username'];
                       $_SESSION['nama'] = $datauser['nama'];
                       $_SESSION['hak_akses'] = $datauser['hak_akses'];
@@ -118,7 +112,8 @@ require_once '../database/config.php'
           
                     } else {
                       session_destroy();
-                      echo '<script>window.location = "../gagal" </script>';
+                      echo '<script>alert("Password Salah Silahkan Login Ulang")</script>';
+                      echo '<script>window.location = "../login" </script>';
                     }
 
                   }
@@ -131,7 +126,7 @@ require_once '../database/config.php'
               <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
                 <div class="text-white px-3 py-4 p-md-5 mx-md-4">
                   <h4 class="mb-4">Service Komputer</h4>
-                  <p class="small mb-0">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+                  <p class="small mb-0"></p>
                 </div>
               </div>
             </div>

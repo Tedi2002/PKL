@@ -1,19 +1,19 @@
 <?php
 session_start();
 require_once '../database/config.php';
-$konstruktor = 'admin_dashboard';
-if ($_SESSION['hak_akses']!=1){
+$konstruktor = 'teknisi_gantipw';
+if ($_SESSION['hak_akses']!=2){
   $usr = $_SESSION['user'];
   $waktu = date('Y-m-d H:i:s');
   $auth = $_SESSION['hak_akses'];
   $nama = $_SESSION['nama'];
-  if ($auth==0)
+  if ($auth==1)
   {
-    $tersangka = "Super User";
+    $tersangka = "Admin";
 
   }
-  if($auth==2){
-    $tersangka = "Teknisi";
+  if($auth==0){
+    $tersangka = "Super Admin";
   }
   if ($auth > 2 ) { 
     
@@ -53,13 +53,8 @@ else
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
- 
-    <!-- Preloader -->
- <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__shake" src="../img/logoservice.png" alt="Monev Skripsi" height="250px" width="250px">
-  </div>
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-light navbar-dark">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <?php 
     include '../navbar.php';
     ?>
@@ -67,11 +62,11 @@ else
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-warning elevation-4">
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle " style="opacity: .8">
-      <span class="brand-text font-weight-light"><b><h5>Pangeran Komputer</h5></b></span>
+      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+      <span class="brand-text font-weight-light">Service Komputer</span>
     </a>
 
     <!-- Sidebar -->
@@ -86,7 +81,7 @@ else
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <?php 
-          include '../admin_sidebar.php';
+          include '../teknisi_sidebar.php';
           ?>
 
         </ul>
@@ -95,23 +90,13 @@ else
     </div>
     <!-- /.sidebar -->
   </aside>
-  
-   <!-- Content Wrapper. Contains page content -->
-   <div class="content-wrapper">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Dashboard Admin</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
-              <li class="breadcrumb-item active">Dashboard Admin</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
+        
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -121,30 +106,43 @@ else
       <div class="container-fluid">
         <div class="row">
         <div class="card-body">
-        <?php
-            // $value = 'Virgy';
+        <div class="col-lg-6">
+         <div class="card card-primary">
+              <div class="card-header">
+                <h3 class="card-title"><i class ="nav-icon fas fa-lock"></i>&nbsp; Ganti Password</h3>
+              </div>
+              <!-- /.card-header -->
+              <!-- form start -->
+              <form action="proses.php" method="post">
+                <div class="card-body">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" class="form-control" id="username" value = "<?=$_SESSION['user']; ?>" disabled>
+                    <input type="text" class="form-control" name = "user" id="username" value = "<?=$_SESSION['user']; ?>" hidden>
+                  </div>
+                  <div class="form-group">
+                    <label for="nama">Nama Pengguna</label>
+                    <input type="text" class="form-control" id="nama" value = "<?=$_SESSION['nama']; ?>" disabled>
+                  </div>
+                  <div class="form-group">
+                    <label for="pass_lama">Password Lama</label>
+                    <input type="password" class="form-control" id="pass_lama" placeholder ="Password Lama" name ='pwlama' required>
+                  </div>
+                  <div class="form-group">
+                    <label for="pass_baru">Password Baru</label>
+                    <input type="password" class="form-control" id="pass_baru" placeholder ="Password Baru" name ='pwbaru' required>
+                  </div>
+                </div>
+                <!-- /.card-body -->
 
-            // $encript_data = encriptData($value);
-            // $decript_data = decriptData($encript_data);
-            
-            
-            // echo $value;
-            // echo '<hr>';
-            // echo $encript_data;
-            // echo '<hr>';
-            // echo $decript_data;
+                <div class="card-footer">
+                  <button type="submit" class="btn btn-primary btn-block" name = "gantipw"><i class = "nav-icon fas fa-sync"></i>&nbsp;Ganti Password</button>
+                </div>
+              </form>
+            </div>
+            <!-- /.card -->
 
-        
-
-            // echo 'Variable: '.$value;
-            // echo '<hr>';
-            // echo 'Encode: '.$data_encript;
-            // echo '<hr>';
-            // echo 'Decode: '.decriptData($data_encript);
-
-
-            ?> 
-
+         </div>
         </div>
         </div>
         <!-- /.row -->

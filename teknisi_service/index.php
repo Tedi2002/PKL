@@ -1,8 +1,8 @@
 <?php
 session_start();
 require_once '../database/config.php';
-$konstruktor = 'admin_requestservice';
-if ($_SESSION['hak_akses']!=1){
+$konstruktor = 'teknisi_service';
+if ($_SESSION['hak_akses']!=2){
   $usr = $_SESSION['user'];
   $waktu = date('Y-m-d H:i:s');
   $auth = $_SESSION['hak_akses'];
@@ -10,17 +10,16 @@ if ($_SESSION['hak_akses']!=1){
   if ($auth==0)
   {
     $tersangka = "Super User";
-
   }
-  if($auth==2){
-    $tersangka = "Teknisi";
+  if($auth==1){
+    $tersangka = "Admin";
   }
   if ($auth > 2 ) { 
     $tersangka = "Unknown";
   }
   $ket = "Pengguna dengan username ".$usr." , nama : ".$nama." melakukan cross authority dengan akses  sebagai ".$tersangka;
-  $querycrossauth = mysqli_query($koneksi, "INSERT INTO tbl_cross_auth VALUES (NULL,'$usr','$waktu', '$ket')") or die (mysqli_error($koneksi));
-  // echo '<script>window.location="../login/logout.php"</script>';
+  $querycrossauth = mysqli_query($koneksi, "INSERT INTO tbl_cross_auth VALUES ('$usr','$waktu','$ket')") or die (mysqli_error($koneksi));
+  echo '<script>window.location="../login/logout.php"</script>';
 
   
 }
@@ -51,7 +50,7 @@ else
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-dark navbar-light">
     <?php 
     include '../navbar.php';
     ?>
@@ -59,7 +58,7 @@ else
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-warning elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
       <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
@@ -78,7 +77,7 @@ else
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <?php 
-          include '../admin_sidebar.php';
+          include '../teknisi_sidebar.php';
           ?>
 
         </ul>
@@ -111,60 +110,6 @@ else
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              <a href="tambah_data.php" data-id_request="<?= $dt_request['id_request']; ?>" class="btn btn-sm btn-warning">
-                <i class="nav-icon fas fa-download" ></i> <b>Tambah Data</b>
-               
-              </a>
-              <br>
-              <br>
-              <a href="../admin_requestservice" class="btn btn-sm btn-danger"> Belum Delegasi
-                <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=1") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
-              <a href="sudahdelegasi.php" class="btn btn-sm btn-primary"> Sudah Delegasi
-              <?php
-                $sudahdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=2") or die (mysqli_error($koneksi));
-                $jmlsudahdelegasi = mysqli_num_rows($sudahdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlsudahdelegasi;?></span>
-              </a>
-              <a href="saranperbaikan.php" class="btn btn-sm btn-warning"> Saran Perbaikan
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=3") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
-              <a href="sedangproses.php" class="btn btn-sm btn-info"> Sedang Diproses
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=4") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
-              <a href="selesai.php" class="btn btn-sm btn-success"> Selesai
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=5") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              </a>
-              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=0") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              </a>
-                      
-              
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
@@ -183,7 +128,7 @@ else
                   <tbody>
                     <?php 
                     $no =1;
-                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_request WHERE status=3 ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
+                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_request WHERE status=4 ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
 
                     if (mysqli_num_rows($qr_request)> 0) {
                       while ($dt_request = mysqli_fetch_array($qr_request)){
@@ -199,10 +144,7 @@ else
                         </td>
                         <td><?= $dt_request['nama_cust']; ?></td>
                         <td><?= $dt_request['alamat']; ?></td>
-                        <td><center>
-                        <a href="https://api.whatsapp.com/send?phone=<?=$dt_request['kontak'];?>&text=Hallo, <?=$dt_request['nama_cust'];?>" class="btn btn-sm btn-success" target="_blank">
-                        <img src="../img/wa.png" height="18px" weight="18px"><?=$dt_request['kontak'];?></a>
-                        </center></td>
+                        <td><?= $dt_request['kontak']; ?></td>
                         <td><?= $dt_request['keluhan']; ?></td>
                         <td>
                           <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-ket" data-keterangan="<?= $dt_request['keterangan']; ?>"><i class="nav-icon fas fa-eye"></i>
@@ -272,22 +214,9 @@ else
                       
                       </td>
                         <td>
-                        <button type="button" class="btn  btn-sm btn-info btn-edit" data-toggle="modal" data-target="#modal-edit" data-id_request="<?= $dt_request['id_request']; ?>" data-nama_cust="<?= $dt_request['nama_cust']; ?>" data-kontak="<?= $dt_request['kontak']; ?>" data-alamat="<?= $dt_request['alamat']; ?>" data-tanggal_request="<?= $dt_request['tanggal_request']; ?>" data-keluhan="<?= $dt_request['keluhan']; ?>" data-keterangan="<?= $dt_request['keterangan']; ?>" data-id_teknisi="<?= $dt_request['id_teknisi']; ?>" data-saran_teknisi="<?= $dt_request['saran_teknisi']; ?>" data-status="<?= $dt_request['status']; ?>" ><i class="nav-icon fas fa-edit"></i></button>
-                        <a href="proses.php?hps_request=<?= encriptData($dt_request['id_request']); ?>" class="btn btn-sm btn-danger" onclick="return confirm('Anda akan menghapus request dengan id [<?= encriptData($dt_request['id_request']);?>]')"><i class="fas fa-trash"></i></a>
-                        
-                     
-                        <?php 
-                        if ($dt_request['status'] != '3') { ?>
-                        <button type="button" name="delegasi" class="btn btn-sm btn-info btn-edit" data-toggle="modal" data-target="#modal-delegasi" data-id_request="<?= $dt_request['id_request']; ?>">
-                          <i class="nav-icon fas fa-eye"></i> Delegasi
-                        </button>
-                        <?php }
-                        else { ?>
-                        <a href="proses_service.php?service=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-primary" onclick="return confirm('Proses Service Ini?')"><i class="fas fa-spinner"></i>Proses</a>
-                        <a href="proses_batal.php?service=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Bataklkan Proses Service Ini?')"><i class="fas fa-"></i>Batal</a>
-                        <?php } ?>
-
-
+                       
+                        <a href="proses_selesai.php?service=<?=$dt_request['id_request']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Selesaikan Proses Service Ini?')"><i class="fas fa-play"></i>Selesaikan</a>
+                       
                       </td>
           
                       </tr>
@@ -297,9 +226,7 @@ else
                   
                   
                   </tbody>
-                  <tfoot>
                   
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

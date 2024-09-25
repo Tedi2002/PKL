@@ -19,9 +19,8 @@ if ($_SESSION['hak_akses']!=2){
   }
   $ket = "Pengguna dengan username ".$usr." , nama : ".$nama." melakukan cross authority dengan akses  sebagai ".$tersangka;
   $querycrossauth = mysqli_query($koneksi, "INSERT INTO tbl_cross_auth VALUES ('$usr','$waktu','$ket')") or die (mysqli_error($koneksi));
-  // echo '<script>window.location="../login/logout.php"</script>';
+  echo '<script>window.location="../login/logout.php"</script>';
 
-  
 }
 else 
 {
@@ -108,7 +107,6 @@ else
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-              
               </div>
               <!-- /.card-body -->
             </div>
@@ -146,13 +144,10 @@ else
             </div>
             <div class="modal-body">
             <input type="textbox" name="keterangan" disabled style="width: 100%; " >
-              
             </div>        
-           
           </div>
         </div>
       </div>
-
       <div class="modal fade" id="modal-edit">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -164,7 +159,6 @@ else
             </div>
             <form class="form-horizontal" action="edit.php" method="POST" id="editdata">
             <div class="modal-body">
-
                 <table>
                   <thead>
                     <tbody>
@@ -174,22 +168,19 @@ else
                         <td><input type="text" name="ed_idrq" class="form-control" hidden >
                         <input type="text" name="ed_idrq" class="form-control" disabled>
                       </td>
-                        
                       </tr>
-                   
-                    
                       <tr>
                         <td width="30%">Tanggal</td>
                         <td width="5%">:</td>
                         <td><input type="date" name="ed_tgl" class="form-control" hidden>
-                        <input type="date" name="ed_tgl" class="form-control" disabled>                     
+                        <input type="date" name="ed_tgl" class="form-control" disabled>
                       </td>
-                      </tr> 
+                      </tr>
                       <tr>
                         <td width="30%">Keluhan</td>
                         <td width="5%">:</td>
                         <td><input type="text" name="ed_keluhan" class="form-control" hidden>
-                        <input type="text" name="ed_keluhan" class="form-control" disabled>                        
+                        <input type="text" name="ed_keluhan" class="form-control" disabled>
                       </td>
                       </tr>
                       <tr>
@@ -199,15 +190,12 @@ else
                         <input type="text" name="ed_ket" class="form-control" disabled>
                       </td>
                       </tr>
-                     
                       <tr>
                         <td width="30%">Saran</td>
                         <td width="5%">:</td>
                         <td><input type="text" name="ed_saran" class="form-control" >
                       </td>
                       </tr>
-                     
-                     
                     </tbody>
                   </thead>
                 </table>

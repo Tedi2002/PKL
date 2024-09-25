@@ -30,7 +30,7 @@
         // jika password lama tidak sesuai dengan inputan maka tampilkan
         echo '<script>alert("Password lama tidak sesuai broo")</script>';
         echo '<script>
-          window.location="../admin_gantipw"</script>';
+          window.location="../teknisi_gantipw"</script>';
       }
       else {
         // jika password lama sesuai dengan inputan maka tampilkan

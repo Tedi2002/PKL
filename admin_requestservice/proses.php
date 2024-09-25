@@ -10,7 +10,7 @@
      session_start();
      require_once '../database/config.php';
     
-     if (isset($_POST['tambah'])) {
+     if (isset($_POST['tambahrequest'])) {
         // $idrq =trim(mysqli_real_escape_string($koneksi,$_POST['idrq']));
         $tanggal =date('Y-m-d');
         $namap =trim(mysqli_real_escape_string($koneksi, $_POST['namap']));

@@ -17,7 +17,7 @@ require_once '../database/config.php'
   <!-- Google Fonts Roboto -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
   <!-- MDB -->
-  <link rel="stylesheet" href="../login/css/bootstrap-login-form.min.css" />
+  <link rel="stylesheet" href="css/bootstrap-login-form.min.css" />
 </head>
 
 <body>
@@ -92,35 +92,32 @@ require_once '../database/config.php'
                     $password = sha1(trim(mysqli_real_escape_string($koneksi, $_POST['password'])));
                     $cekdatabase = mysqli_query($koneksi, "SELECT * FROM tbl_login WHERE username= '$username' AND password='$password'") or die (mysqli_error($koneksi));
                     $returnvalue = mysqli_num_rows($cekdatabase);
-                    if ($returnvalue > 0){
-                      session_start();
-                      $datauser = mysqli_fetch_assoc($cekdatabase);
-                      $_SESSION['user'] = $datauser['username'];
-                      $_SESSION['nama'] = $datauser['nama'];
-                      $_SESSION['hak_akses'] = $datauser['hak_akses'];
-                      echo '<script>window.location = "../superadmin_dashboard" </script>';
-                    }
-                    elseif ($st_user==1){
+                    $datauser = mysqli_fetch_assoc($cekdatabase);
+                    $stt= $datauser['hak_akses'];
+                    session_start();
+                    
+                    if ($stt==1){
                       $_SESSION['user'] = $datauser['username'];
                       $_SESSION['nama'] = $datauser['nama'];
                       $_SESSION['hak_akses'] = $datauser['hak_akses'];
           
                       echo '<script> window.location= "../admin_dashboard"</script>';
                     }
-                    elseif ($st_user==2){
+                    elseif ($stt==2){
                       $_SESSION['user'] = $datauser['username'];
                       $_SESSION['nama'] = $datauser['nama'];
                       $_SESSION['hak_akses'] = $datauser['hak_akses'];
           
                       echo '<script> window.location= "../teknisi_dashboard"</script>';
           
+                    } else {
+                      session_destroy();
+                      echo '<script>alert("Password Salah Silahkan Login Ulang")</script>';
+                      echo '<script>window.location = "../login" </script>';
                     }
 
                   }
-                  else {
-                    session_destroy();
-                    echo '<script>window.location = "../gagal" </script>';
-                  }
+                 
                   
                   ?>
 
@@ -141,7 +138,7 @@ require_once '../database/config.php'
   <!-- End your project here-->
 
   <!-- MDB -->
-  <script type="text/javascript" src="../login/js/mdb.min.js"></script>
+  <script type="text/javascript" src="js/mdb.min.js"></script>
   <!-- Custom scripts -->
   <script type="text/javascript"></script>
 </body>

@@ -50,8 +50,14 @@ else
 -->
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
+
+<!-- Preloader -->
+<div class="preloader flex-column justify-content-center align-items-center">
+    <img class="animation__shake" src="../img/logoservice.png" alt="Monev Skripsi" height="150px" width="150px">
+  </div>
+
   <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+  <nav class="main-header navbar navbar-expand navbar-light navbar-dark">
     <?php 
     include '../navbar.php';
     ?>
@@ -59,13 +65,12 @@ else
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <aside class="main-sidebar sidebar-dark-warning elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
-      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Service Komputer</span>
+      <img src="../img/logoservice.png" alt="AdminLTE Logo" class="brand-image img-circle " style="opacity: .8">
+      <span class="brand-text font-weight-light"><b><h5>Pangeran Komputer</h5></b></span>
     </a>
-
     <!-- Sidebar -->
     <div class="sidebar">
       
@@ -93,7 +98,17 @@ else
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Dashboard Admin Riwayat Service</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Dashboard Admin Riwayat Service</li>
+            </ol>
+          </div><!-- /.col -->
+        </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
     <!-- /.content-header -->
@@ -105,9 +120,10 @@ else
         <div class ="col-lg-12">
 
         
-        <div class="card-primary">
+        <div class="card-dark">
               <div class="card-header">
-                <h3 class="card-title">Request Service</h3>
+                <h3 class="card-title">
+                <i class ="nav-icon fas fa-history"></i>&nbsp; Riwayat Service</h3>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -132,7 +148,7 @@ else
                   <tbody>
                     <?php 
                     $no =1;
-                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_riwayatservice ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
+                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_request WHERE status = 5 or status = 0 ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
 
                     if (mysqli_num_rows($qr_request)> 0) {
                       while ($dt_request = mysqli_fetch_array($qr_request)){
@@ -155,11 +171,17 @@ else
                       $pglteknisi = mysqli_query($koneksi,"SELECT nama FROM tbl_teknisi WHERE id_teknisi = '$idteknisi'")or die (mysqli_error($koneksi));
                       $arrteknisi = mysqli_fetch_assoc($pglteknisi);
                       
-                      if($dt_request['status'] == '5'){
+                      if($dt_request['status'] == '0'){
                         ?>
                         <button type="button" class="btn btn-sm btn-danger"> Dibatalkan</button>
                         <?php
                       }
+                      elseif($dt_request['status'] == '5'){
+                        ?>
+                        <button type="button" class="btn btn-sm btn-success"> Selesai</button>
+                        <?php
+                      }
+                      
                       
 
                       ?>
@@ -233,45 +255,45 @@ else
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header" style="background-color:#800000">
-              <h4 class="modal-title"><font color="ffffff">Edit Data</font></h4>
+              <h4 class="modal-title"><font color="ffffff">Service Ulang</font></h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form class="form-horizontal" action="edit.php" method="POST" id="editdata">
+            <form class="form-horizontal" action="proses.php" method="POST" id="editdata">
             <div class="modal-body">
 
                 <table>
                   <thead>
                     <tbody>
-                    <tr>
+                      <!-- <tr>
                         <td width="30%">Id Request</td>
                         <td width="5%">:</td>
                         <td><input type="text" name="ed_idrq" class="form-control" hidden >
-                        <input type="text" name="ed_idrq" class="form-control" disabled>
+                        <input type="text" name="ed_idrq" class="form-control" hidden>
                         
                       </td>
                         
-                      </tr>
+                      </tr> -->
                       <tr>
                         <td width="30%">Nama Pelanggan</td>
                         <td width="5%">:</td>
-                        <td><input type="text" name="ed_nama" class="form-control"></td>
+                        <td><input type="text" name="tbh_nama" class="form-control"></td>
                       </tr>
                       <tr>
                         <td width="30%">Kontak</td>
                         <td width="5%">:</td>
-                        <td><input type="text" name="ed_kontak" class="form-control"></td>
+                        <td><input type="text" name="tbh_kontak" class="form-control"></td>
                       </tr>
                       <tr>
                         <td width="30%">Alamat</td>
                         <td width="5%">:</td>
-                        <td><input type="text" name="ed_alamat" class="form-control"></td>
+                        <td><input type="text" name="tbh_alamat" class="form-control"></td>
                       </tr>
                       <tr>
                         <td width="30%">Tanggal</td>
                         <td width="5%">:</td>
-                        <td><input type="date" name="ed_tgl" class="form-control">                    
+                        <td><input type="date" name="tbh_tgl" class="form-control">                    
                       </td>
                       </tr> 
                       <tr>
@@ -282,9 +304,9 @@ else
                       <tr>
                         <td width="30%">keterangan</td>
                         <td width="5%">:</td>
-                        <td><input type="text" name="ed_ket" class="form-control"></td>
+                        <td><input type="text" name="tbh_ket" class="form-control"></td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td width="30%">Id Teknisi</td>
                         <td width="5%">:</td>
                         <td><input type="text" name="ed_idtek" class="form-control" hidden>
@@ -302,7 +324,7 @@ else
                         <td width="30%">Status</td>
                         <td width="5%">:</td>
                         <td><input type="text" name="ed_stt" class="form-control"></td>
-                      </tr>
+                      </tr> -->
                      
                     </tbody>
                   </thead>
@@ -310,7 +332,7 @@ else
             </div>
             <div class="modal-footer justify-content-right">
               
-              <button type="submit" class="btn btn-primary" name="editrequest" > <i class="nav-icon fas fa-edit"></i>Edit</button>
+              <button type="submit" class="btn btn-primary" name="tambahrequest" > <i class="nav-icon fas fa-share"></i>Request</button>
             </div>
           </form>
           </div>
@@ -348,7 +370,6 @@ else
 
                     //buat variabel untuk menampung return value dari query $pglprodi
                     $rvtek = mysqli_num_rows($pglteknisi);
-
                     //kondisi jika tabel_prodi memiliki <= 1 data
                     if($rvtek>0){
 
@@ -406,27 +427,27 @@ $(e.currentTarget).find('input[name="keterangan"]').val(keterangan);
 <script type="text/javascript">
 $('#modal-edit').on ('show.bs.modal', function(e){
 
-  var ed_idrq = $(e.relatedTarget).data('id_request');
+  // var ed_idrq = $(e.relatedTarget).data('id_request');
   var ed_nama =$(e.relatedTarget).data('nama_cust');
   var ed_kontak =$(e.relatedTarget).data('kontak');
   var ed_alamat =$(e.relatedTarget).data('alamat');
-  var ed_tgl = $(e.relatedTarget).data('tanggal_request');
-  var ed_keluhan = $(e.relatedTarget).data('keluhan');
-  var ed_ket =$(e.relatedTarget).data('keterangan');
-  var ed_idtek =$(e.relatedTarget).data('id_teknisi');
-  var ed_saran =$(e.relatedTarget).data('saran_teknisi');
-  var ed_status =$(e.relatedTarget).data('status');
+  // var ed_tgl = $(e.relatedTarget).data('tanggal_request');
+  // var ed_keluhan = $(e.relatedTarget).data('keluhan');
+  // var ed_ket =$(e.relatedTarget).data('keterangan');
+  // var ed_idtek =$(e.relatedTarget).data('id_teknisi');
+  // var ed_saran =$(e.relatedTarget).data('saran_teknisi');
+  // var ed_status =$(e.relatedTarget).data('status');
 
-  $(e.currentTarget).find('input[name="ed_idrq"]').val(ed_idrq);
-  $(e.currentTarget).find('input[name="ed_nama"]').val(ed_nama);
-  $(e.currentTarget).find('input[name="ed_kontak"]').val(ed_kontak);
-  $(e.currentTarget).find('input[name="ed_alamat"]').val(ed_alamat);
-  $(e.currentTarget).find('input[name="ed_tgl"]').val(ed_tgl);
-  $(e.currentTarget).find('input[name="ed_keluhan"]').val(ed_keluhan);
-  $(e.currentTarget).find('input[name="ed_ket"]').val(ed_ket);
-  $(e.currentTarget).find('input[name="ed_idtek"]').val(ed_idtek);
-  $(e.currentTarget).find('input[name="ed_saran"]').val(ed_saran);
-  $(e.currentTarget).find('input[name="ed_stt"]').val(ed_status);
+  // $(e.currentTarget).find('input[name="ed_idrq"]').val(ed_idrq);
+  $(e.currentTarget).find('input[name="tbh_nama"]').val(ed_nama);
+  $(e.currentTarget).find('input[name="tbh_kontak"]').val(ed_kontak);
+  $(e.currentTarget).find('input[name="tbh_alamat"]').val(ed_alamat);
+  // $(e.currentTarget).find('input[name="tbh_tgl"]').val(ed_tgl);
+  // $(e.currentTarget).find('input[name="tbh_keluhan"]').val(ed_keluhan);
+  // $(e.currentTarget).find('input[name="ed_ket"]').val(ed_ket);
+  // $(e.currentTarget).find('input[name="ed_idtek"]').val(ed_idtek);
+  // $(e.currentTarget).find('input[name="ed_saran"]').val(ed_saran);
+  // $(e.currentTarget).find('input[name="ed_stt"]').val(ed_status);
 });
 </script>
 

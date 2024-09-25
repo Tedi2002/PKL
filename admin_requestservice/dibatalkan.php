@@ -141,14 +141,6 @@ else
                 ?>
               <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
               </a>
-              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
-              <?php
-                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=3") or die (mysqli_error($koneksi));
-                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
-               
-                ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
-              </a>
               <a href="sedangproses.php" class="btn btn-sm btn-info"> Sedang Diproses
               <?php
                 $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=4") or die (mysqli_error($koneksi));
@@ -163,7 +155,13 @@ else
                 $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
                
                 ?>
-              <span class="badge badge-secondary right"><?=$jmlbelimdelegasi;?></span>
+              </a>
+              <a href="dibatalkan.php" class="btn btn-sm btn-danger"> Dibatalkan
+              <?php
+                $belumdelegasi = mysqli_query($koneksi,"SELECT * FROM tbl_request WHERE status=0") or die (mysqli_error($koneksi));
+                $jmlbelimdelegasi = mysqli_num_rows($belumdelegasi);
+               
+                ?>
               </a>
                       
               
@@ -185,7 +183,7 @@ else
                   <tbody>
                     <?php 
                     $no =1;
-                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_request WHERE status=1 ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
+                    $qr_request = mysqli_query($koneksi, "SELECT * FROM tbl_request WHERE status=0 ORDER BY tanggal_request DESC") or die (mysqli_error($koneksi));
 
                     if (mysqli_num_rows($qr_request)> 0) {
                       while ($dt_request = mysqli_fetch_array($qr_request)){
@@ -201,7 +199,10 @@ else
                         </td>
                         <td><?= $dt_request['nama_cust']; ?></td>
                         <td><?= $dt_request['alamat']; ?></td>
-                        <td><?= $dt_request['kontak']; ?></td>
+                        <td><center>
+                        <a href="https://api.whatsapp.com/send?phone=<?=$dt_request['kontak'];?>&text=Hallo, <?=$dt_request['nama_cust'];?>" class="btn btn-sm btn-success" target="_blank">
+                        <img src="../img/wa.png" height="18px" weight="18px"><?=$dt_request['kontak'];?></a>
+                        </center></td>
                         <td><?= $dt_request['keluhan']; ?></td>
                         <td>
                           <button type="button" class="btn  btn-info btn-edit" data-toggle="modal" data-target="#modal-ket" data-keterangan="<?= $dt_request['keterangan']; ?>"><i class="nav-icon fas fa-eye"></i>
